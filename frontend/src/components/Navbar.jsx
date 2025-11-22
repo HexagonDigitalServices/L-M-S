@@ -6,7 +6,16 @@ const navItems = [
   { name: "Contact", icon: Contact, href: "/contact" },
 ];
 
+ // INSTANT token removal using Clerk logout event
+  useEffect(() => {
+    const handleLogout = () => {
+      localStorage.removeItem("token");
+      console.log("Token removed instantly on Clerk logout event");
+    };
 
+    window.addEventListener("user:signed_out", handleLogout);
+    return () => window.removeEventListener("user:signed_out", handleLogout);
+  }, []);
 
   // Scroll hide/show
   useEffect(() => {
