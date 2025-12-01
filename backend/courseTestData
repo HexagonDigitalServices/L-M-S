@@ -1,0 +1,57 @@
+{
+  "name": "Test Course - DuraƟ on Check",
+  "teacher": "HEXAGON",
+  "pricingType": "free",
+  "price": {
+    "original": 0,
+    "sale": 0
+  },
+  "overview": "Course to test duraƟ on calculaƟ on (chapters vs lecture duraƟ ons).",
+  "lectures": [
+    {
+      "Ɵ tle": "Lecture 1",
+      "duraƟ on": {
+        "hours": 0,
+        "minutes": 0
+      },
+      "chapters": [
+        {
+          "name": "Chapter 1",
+          "topic": "Intro",
+          "duraƟ on": {
+            "hours": 2,
+            "minutes": 0
+          },
+          "videoUrl": "hƩ ps://youtu.be/example1"
+        },
+        {
+          "name": "Chapter 2",
+          "topic": "Setup",
+          "duraƟ on": {
+            "hours": 0,
+            "minutes": 30
+          },
+          "videoUrl": "hƩ ps://youtu.be/example2"
+        }
+      ]
+    },
+    {
+      "Ɵ tle": "Lecture 2",
+      "duraƟ on": {
+        "hours": 0,
+        "minutes": 0
+      },
+      "chapters": [
+        {
+          "name": "Chapter A",
+          "topic": "Advanced",
+          "duraƟ on": {
+            "hours": 3,
+            "minutes": 0
+          },
+          "videoUrl": "hƩ ps://youtu.be/example3"
+        }
+      ]
+    }
+  ]
+}
