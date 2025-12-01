@@ -158,3 +158,14 @@ const makeImageAbsolute = (rawImage, req) => {
     const totalRatings = ratingsArr.length;
     const sum = ratingsArr.reduce((s, r) => s + (Number(r.rating) || 0), 0);
     const avgRating = totalRatings === 0 ? 0 : Number((sum / totalRatings).toFixed(2));
+
+
+
+catch (err) {
+    console.error("rateCourse error:", err);
+    // if a mongoose validation error includes path ratings.0.userId you can surface it
+    if (err && err.name === "ValidationError") {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
