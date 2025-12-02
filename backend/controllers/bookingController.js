@@ -121,6 +121,48 @@ export const createBooking = async (req, res) => {
   }
 };
 
+/* ---------------- Authenticated: confirmPayment ----------------*/
+export const confirmPayment = async (req, res) => {
+  try {
+    const { userId } = getAuth(req) || {};
+    if (!userId) return res.status(401).json({ success: false, message: "Authentication required" });
+
+    const { session_id } = req.query;
+    if (!session_id) return res.status(400).json({ success: false, message: "session_id is required" });
+
+    if (!stripe) return res.status(500).json({ success: false, message: "Stripe not configured" });
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    if (!session) return res.status(400).json({ success: false, message: "Invalid session" });
+
+    if (session.payment_status !== "paid") {
+      return res.status(400).json({ success: false, message: "Payment not completed" });
+    }
+
+    // Try match by sessionId first, then metadata.bookingId
+    let booking = await Booking.findOneAndUpdate(
+      { sessionId: session_id },
+      { paymentStatus: "Paid", paymentIntentId: session.payment_intent || null, orderStatus: "Confirmed", paidAt: new Date() },
+      { new: true }
+    );
+
+    if (!booking && session.metadata?.bookingId) {
+      booking = await Booking.findOneAndUpdate(
+        { bookingId: session.metadata.bookingId },
+        { paymentStatus: "Paid", paymentIntentId: session.payment_intent || null, orderStatus: "Confirmed", paidAt: new Date() },
+        { new: true }
+      );
+    }
+
+    if (!booking) return res.status(404).json({ success: false, message: "Booking not found" });
+
+    return res.json({ success: true, booking });
+  } catch (err) {
+    console.error("confirmPayment:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 
 /* ---------------- GetStats ---------------- */
     const topCourses = await Booking.aggregate([
