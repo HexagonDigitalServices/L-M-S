@@ -1,0 +1,9 @@
+{ 
+ "courseId": "692d88608ff24a8314a8a3a0", 
+ "courseName": "Test Course - Free", 
+ "teacherName": "HDS", 
+ "price": 0, 
+ "email": "student@example.com", 
+ "studentName": "Test Student", 
+ "notes": "free course test" 
+}
