@@ -1,27 +1,3 @@
-// src/pages/Add/AddPage.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Plus,
-  Upload,
-  X,
-  Video,
-  Clock,
-  Star,
-  ChevronDown,
-  ChevronUp,
-  Image as ImageIcon,
-  BadgeIndianRupee,
-  BookOpenText,
-  PenLine,
-  UserPen,
-  ListOrdered,
-} from "lucide-react";
-import { toast, Toaster } from "react-hot-toast";
-import { addPageStyles } from "../../assets/dummyStyles";
-
-const API_BASE = "http://localhost:4000";
-
 // formatDuration accepts either {hours, minutes} or (hours, minutes)
 const formatDuration = (a, b) => {
   let hours = 0;
