@@ -27,6 +27,35 @@
 
 
 
+      const submitRatingToServer = async (courseId, ratingValue) => {
+    try {
+      const headers = { "Content-Type": "application/json" };
+      // try to get Clerk JWT token if available (works with Clerk)
+      try {
+        if (getToken) {
+          const token = await getToken().catch(() => null);
+          if (token) headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (err) {
+        // ignore token errors and fall back to credentials include
+      }
+
+      const res = await fetch(`${API_BASE}/api/course/${courseId}/rate`, {
+        method: "POST",
+        headers,
+        credentials: "include",
+        body: JSON.stringify({ rating: ratingValue }),
+      });
+      const data = await res.json().catch(() => ({ success: false }));
+      if (!res.ok && !data.success) {
+        const msg =
+          (data && (data.message || data.error)) ||
+          `Failed to rate (${res.status})`;
+        throw new Error(msg);
+      }
+
+      // Expect server to return new avg & total (controller examples above do)
+      // Some servers return { success: true, avgRating, totalRatings }
       const avg =
         data.avgRating ??
         data.course?.avgRating ??
@@ -39,6 +68,7 @@
         data.course?.ratingCount ??
         data.course?.ratingCount;
 
+      // update UI with returned aggregates (fallback to previous if missing)
       setCourses((prev) =>
         prev.map((c) =>
           c.id === courseId
@@ -62,8 +92,10 @@
       toast.error(err.message || "Failed to submit rating");
       return { success: false, error: err };
     }
+  };
 
 
+  "⭐"
 
   const renderInteractiveStars = (course) => {
     // if signed in and user rated, show their rating; otherwise show rounded avg
