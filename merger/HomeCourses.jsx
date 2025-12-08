@@ -1,3 +1,62 @@
+const RatingStars = ({
+  courseId,
+  userRating = 0,
+  avgRating = 0,
+  totalRatings = 0,
+  onRate,
+}) => {
+  const [hover, setHover] = useState(0);
+  const base = userRating || Math.round(avgRating || 0);
+  const display = hover || base;
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ display: "flex", gap: 6 }}
+      >
+        {Array.from({ length: 5 }).map((_, i) => {
+          const idx = i + 1;
+          const filled = idx <= display;
+          return (
+            <button
+              key={idx}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onRate && onRate(courseId, idx);
+              }}
+              onMouseEnter={() => setHover(idx)}
+              onMouseLeave={() => setHover(0)}
+              aria-label={`Rate ${idx} star${idx > 1 ? "s" : ""}`}
+              style={{
+                background: "transparent",
+                border: "none",
+                padding: 2,
+                cursor: "pointer",
+              }}
+            >
+              <StarIcon
+                filled={filled}
+                className={filled ? "text-yellow-400" : "text-gray-300"}
+              />
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", marginLeft: 6 }}>
+        <div style={{ fontWeight: 700, fontSize: 13 }}>
+          {(avgRating || 0).toFixed(1)}
+        </div>
+        <div style={{ fontSize: 12, color: "#6b7280" }}>
+          ({totalRatings || 0})
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
       .then((json) => {
         if (!mounted) return;
